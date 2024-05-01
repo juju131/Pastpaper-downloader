@@ -2,9 +2,10 @@ import os
 import requests
 import tkinter as tk
 from tkinter import ttk
-
+from tkinter.filedialog import askdirectory
+path=askdirectory()
 def download_file(url, directory):
-    local_filename = os.path.join("C:/Users/curle/OneDrive/Desktop/pastpaper", url.split('/')[-1])
+    local_filename = os.path.join(str(path), url.split('/')[-1])
     with requests.get(url, stream=True) as r:
         r.raise_for_status()
         with open(local_filename, 'wb') as f:
@@ -13,7 +14,7 @@ def download_file(url, directory):
     return local_filename
 
 def download_past_papers(urls):
-    desktop_dir = "C:/Users/curle/OneDrive/Desktop/pastpaper"
+    desktop_dir = str(path)
     os.makedirs(desktop_dir, exist_ok=True)
     for url in urls:
         try:
