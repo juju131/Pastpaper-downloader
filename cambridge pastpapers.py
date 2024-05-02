@@ -3,7 +3,15 @@ import requests
 import tkinter as tk
 from tkinter import ttk
 from tkinter.filedialog import askdirectory
-path=askdirectory()
+
+selectfolder=False
+if selectfolder==True:
+    path=askdirectory()
+
+def select():
+    global selectfolder,path
+    selectfolder=True
+    path=askdirectory()
 def download_file(url, directory):
     local_filename = os.path.join(str(path), url.split('/')[-1])
     with requests.get(url, stream=True) as r:
@@ -30,9 +38,10 @@ def generate_past_paper_urls():
     paper = paper_var.get()
     season = season_var.get().lower()
 
+
     if subject == "computer science" and int(year) < 21:
         code = "9608"
-    elif subject == "computer science" and int(year) > 21:
+    elif subject == "computer science":
         code="9618"
     elif subject=="egp":
         code="8021"
@@ -44,6 +53,11 @@ def generate_past_paper_urls():
         code="9701"
     elif subject=="mathematics":
         code="9709"
+    elif subject=="accounts":
+        code="9706"
+#Add more subjects here.
+    #elif subject == "":
+        #code="
 
     type = "s" if season == "summer" else "w" if season == "winter" else None
 
@@ -69,6 +83,7 @@ def main():
 
     global year_var, subject_var, varient_var, paper_var, season_var, status_var
 
+    
     year_var = tk.StringVar()
     subject_var = tk.StringVar()
     varient_var = tk.StringVar()
@@ -77,11 +92,12 @@ def main():
     status_var = tk.StringVar()
 
     ttk.Combobox(frame, textvariable=year_var, values=["07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23"]).grid(row=0, column=1, sticky=tk.W)
-    ttk.Combobox(frame, textvariable=subject_var, values=["Mathematics", "EGP", "Physics", "Chemistry", "Further Mathematics", "Computer Science"]).grid(row=1, column=1, sticky=tk.W)
+    ttk.Combobox(frame, textvariable=subject_var, values=["Mathematics", "EGP", "Physics", "Chemistry", "Further Mathematics", "Computer Science", "Accounts",]).grid(row=1, column=1, sticky=tk.W)
     ttk.Combobox(frame, textvariable=varient_var,values=["11","12","13","21","22","23","31","32","33","41","42","42","43","51","52","53","61","62","63"]).grid(row=2, column=1, sticky=tk.W)
     ttk.Combobox(frame, textvariable=paper_var, values=["ms", "qp","in"]).grid(row=3, column=1, sticky=tk.W)
     ttk.Combobox(frame, textvariable=season_var, values=["Summer", "Winter"]).grid(row=4, column=1, sticky=tk.W)
-    ttk.Button(frame, text="Downloaded", command=generate_past_paper_urls).grid(row=5, column=0, columnspan=2, pady=10)
+    ttk.Button(frame, text="Download", command=generate_past_paper_urls).grid(row=5, column=0, columnspan=2, pady=10)
+    ttk.Button(frame, text="select folder", command=select).grid(row=6, column=0, columnspan=2, pady=10)
     ttk.Label(frame, textvariable=status_var).grid(row=7, column=0, columnspan=2)
 
 
