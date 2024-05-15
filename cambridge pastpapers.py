@@ -1,12 +1,13 @@
-import os
+import subprocess
 import requests
+import os
 import tkinter as tk
 from tkinter import ttk
 from tkinter.filedialog import askdirectory
 
 selectfolder=False
 if selectfolder==True:
-    path=askdirectory()
+    path=""
 
 def select():
     global selectfolder,path
@@ -61,12 +62,11 @@ def generate_past_paper_urls():
 
     type = "s" if season == "summer" else "w" if season == "winter" else None
 
-    if type is None:
-        status_var.set("Invalid season input. Please enter 'summer' or 'winter'.")
-        return
-
     url = f"https://pastpapers.papacambridge.com/directories/CAIE/CAIE-pastpapers/upload/{code}_{type}{year}_{paper}_{varient}.pdf"
     download_past_papers([url])
+
+    location = path + "/"+str(code) + "_" + str(type) + str(year) + "_" + str(paper) + "_" + str(varient) + ".pdf"
+    subprocess.Popen([location],shell=True)
 
 def main():
     root = tk.Tk()
@@ -83,7 +83,7 @@ def main():
 
     global year_var, subject_var, varient_var, paper_var, season_var, status_var
 
-    
+
     year_var = tk.StringVar()
     subject_var = tk.StringVar()
     varient_var = tk.StringVar()
@@ -99,7 +99,6 @@ def main():
     ttk.Button(frame, text="Download", command=generate_past_paper_urls).grid(row=5, column=0, columnspan=2, pady=10)
     ttk.Button(frame, text="select folder", command=select).grid(row=6, column=0, columnspan=2, pady=10)
     ttk.Label(frame, textvariable=status_var).grid(row=7, column=0, columnspan=2)
-
 
     root.mainloop()
 
